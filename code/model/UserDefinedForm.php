@@ -152,7 +152,7 @@ class UserDefinedForm extends Page {
 			);
 
 			// make sure a numeric not a empty string is checked against this int column for SQL server
-			$parentID = (!empty($self->ID)) ? $self->ID : 0;
+			$parentID = (!empty($self->ID)) ? (int)$self->ID : 0;
 
 			// get a list of all field names and values used for print and export CSV views of the GridField below.
 			$columnSQL = <<<SQL
@@ -409,7 +409,7 @@ class UserDefinedForm_Controller extends Page_Controller {
 
 					// Get the field which is effected
 					$formFieldWatch = EditableFormField::get()->byId($rule->ConditionFieldID);
-					
+
 					// Skip deleted fields
 					if(!$formFieldWatch) {
 						continue;
