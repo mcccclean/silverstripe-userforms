@@ -121,7 +121,7 @@ class UserDefinedForm_EmailRecipient extends DataObject {
 		$multiOptionFields = EditableMultipleOptionField::get()->filter('ParentID', $form->ID);
 
 		// if they have email fields then we could send from it
-		$validEmailFromFields = EditableEmailField::get()->filter('ParentID', $form->ID);
+		$validEmailFields = EditableEmailField::get()->filter('ParentID', $form->ID);
 
 		// For the subject, only one-line entry boxes make sense
 		$validSubjectFields = ArrayList::create(
@@ -131,9 +131,6 @@ class UserDefinedForm_EmailRecipient extends DataObject {
 				->toArray()
 		);
 		$validSubjectFields->merge($multiOptionFields);
-
-		// To address cannot be unbound, so restrict to pre-defined lists
-		$validEmailToFields = $multiOptionFields;
 
 		// Build fieldlist
 		$fields = FieldList::create(Tabset::create('Root')->addExtraClass('EmailRecipientForm'));
@@ -159,7 +156,7 @@ class UserDefinedForm_EmailRecipient extends DataObject {
 				DropdownField::create(
 					'SendEmailToFieldID',
 					_t('UserDefinedForm.ORSELECTAFIELDTOUSEASTO', '.. or select a field to use as the to address'),
-					$validEmailToFields->map('ID', 'Title')
+					$validEmailFields->map('ID', 'Title')
 				)->setEmptyString(' ')
 			)
 				->setTitle(_t('UserDefinedForm.SENDEMAILTO','Send email to'))
@@ -187,7 +184,7 @@ class UserDefinedForm_EmailRecipient extends DataObject {
 				DropdownField::create(
 					'SendEmailFromFieldID',
 					_t('UserDefinedForm.ORSELECTAFIELDTOUSEASFROM', '.. or select a field to use as reply to address'),
-					$validEmailFromFields->map('ID', 'Title')
+					$validEmailFields->map('ID', 'Title')
 				)->setEmptyString(' ')
 			)
 				->setTitle(_t('UserDefinedForm.REPLYADDRESS', 'Email for reply to'))
